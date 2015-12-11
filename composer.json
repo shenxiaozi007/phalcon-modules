@@ -1,0 +1,13 @@
+{
+  "require" : {
+    "php" : "~5.6",
+    "illuminate/database" : "*",
+    "filp/whoops" : "*"
+  },
+  "autoload" : {
+    "classmap" : [ "library/extends/", "application/_common/model/mysql" ]
+  },
+  "config" : {
+    "vendor-dir" : "Vendor"
+  }
+}
