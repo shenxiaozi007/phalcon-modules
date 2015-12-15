@@ -1,5 +1,9 @@
 @CHARSET "UTF-8";
+li, p, span {
+    font: 14px/1 Tahoma,Helvetica,Arial,"宋体",sans-serif;
+}
 /* 头部样式 */
+
 ul, ol {
     list-style: outside none none;
 }
@@ -37,5 +41,43 @@ ul, ol {
 	margin-left:10px;
 	text-decoration: none;
 }
-
-
+/*内容样式*/
+.content {
+	margin:0 auto;
+	height:600px;
+	width:900px;
+}
+.content_left {
+	/* background:#88020c; */
+	float:left;
+	height:600px;
+	width:300px;
+}
+.content_right {
+	/* background:#639a63; */
+	float:right;
+	height:600px;
+	width:600px;
+}
+.step_l li {
+	cleal:both;
+	height:30px;
+	line-height:30px;
+}
+.step_l li span {
+	background:#858585 none repeat scroll 0 0;
+	display: inline-block;
+	color: #fff;
+	width:17px;
+	height:18px;
+    text-align: center;
+	line-height: 18px;
+}
+.step_l li.curr span {
+	background: #ffae00 none repeat scroll 0 0;
+    color: #000;
+}
+.step_l li.curr a {
+    color: #146928;
+    font-weight: bold;
+}

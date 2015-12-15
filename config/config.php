@@ -3,10 +3,10 @@ return $config =  array(
     'is_dev' => 1,	//开发模式
 	'tpl_suffix' => '.html',	//模板文件后缀
 	
-	'default_module' => 'home',	//默认模块pc页面
+	'default_module' => 'install',	//默认模块pc页面
 	'default_controller' => 'index',
     //多模块配置
-    'modules' => array('admin','home'),
+    'modules' => array('admin','home','install'),
     
     'mysqlDb'=>	array(
         'driver'    => 'mysql',

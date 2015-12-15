@@ -1,8 +1,8 @@
 <?php 
 //默认路由
 $router->add("/", array(
-    'module' => 'admin',
-    'controller' => 'login',
+    'module' => 'install',
+    'controller' => 'index',
     'action' => 'index'
     
 ));

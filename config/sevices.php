@@ -38,6 +38,8 @@ $loader->registerNamespaces(
         'App\Admin\Controller' => INDEX_ROOT.'/application/admin/controller',
         'App\Home' => INDEX_ROOT.'/application/home/',
         'App\Home\Controller' => INDEX_ROOT.'/application/home/controller',
+        'App\Install' => INDEX_ROOT.'/application/install/',
+        'App\Install\Controller' => INDEX_ROOT.'/application/install/controller',
         'App\Com' => INDEX_ROOT.'/application/_common/',
         'App\Com\Controller' => INDEX_ROOT.'/application/_common/controller',
         'App\M' => INDEX_ROOT.'/application/_common/model',
