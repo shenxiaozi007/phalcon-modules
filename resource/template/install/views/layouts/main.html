@@ -11,32 +11,34 @@
 	</div>
 </div>
 <div class="content">
+    {{ flash.output() }}
 	<div class="content_left">
 		<h1>安装向导</h1>
 		<ul class="step_l">
-			<li class="curr">
+			<li {% if style == 'index' %}class="curr" {% endif %}>
 				<span>1</span>
 				<a>阅读许可协议</a>
 			</li>
-			<li>
+			<li {% if style == 'check' %}class="curr" {% endif %}>
 				<span>2</span>
 				<a>服务器检测</a>
 			</li>
-			<li>
+			<li {% if style == 'start' %}class="curr" {% endif %}>
 				<span>3</span>
 				<a>填写初始配置</a>
 			</li>
-			<li>
+			<li {% if style == 'install' %}class="curr" {% endif %}>
 				<span>4</span>
 				<a>详细安装进程</a>
 			</li>
-			<li>
+			
+			<li {% if style == 'finish' %}class="curr" {% endif %}>
 				<span>5</span>
 				<a>安装完成</a>
 			</li>
 		</ul>
 	</div>
 	<div class="content_right">
-		
+		{{ content()}}
 	</div>
 </div>

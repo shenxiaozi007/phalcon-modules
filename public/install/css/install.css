@@ -41,7 +41,7 @@ ul, ol {
 	margin-left:10px;
 	text-decoration: none;
 }
-/*内容样式*/
+/*安装内容样式*/
 .content {
 	margin:0 auto;
 	height:600px;
@@ -51,13 +51,21 @@ ul, ol {
 	/* background:#88020c; */
 	float:left;
 	height:600px;
-	width:300px;
+	width:200px;
+}
+.con_top {
+	  border: 1px solid #e8e9e9;
+    color: #fb6e1a;
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
 }
 .content_right {
 	/* background:#639a63; */
 	float:right;
 	height:600px;
-	width:600px;
+	width:700px;
 }
 .step_l li {
 	cleal:both;
@@ -80,4 +88,25 @@ ul, ol {
 .step_l li.curr a {
     color: #146928;
     font-weight: bold;
+}
+
+.content_top {
+	border:1px solid #e8e9e9;
+	font-weight: bold;
+	padding-left:10px;
+	padding-top:20px;
+	height:20px;
+	
+}
+.content_center {
+	border:1px solid #e8e9e9;
+	height:400px;
+	padding:10px;
+}
+.content_botton .btn {
+	width:700px;
+    clear: both;
+    margin-top: 10px;
+    text-align: center;
+
 }
