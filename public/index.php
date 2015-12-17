@@ -8,11 +8,13 @@ date_default_timezone_set('Asia/Shanghai');
 
 define('INDEX_ROOT', dirname(dirname(__FILE__)) . '/');	#定义根目录
 define('CONFIG_ROOT', INDEX_ROOT . 'config/');	#定义配置目录
-define('CACHE_ROOT', INDEX_ROOT . 'runtime/cache/');	#定义编译缓存目录
+
+define('RUNTIME_ROOT',INDEX_ROOT.'runtime/');
+define('CACHE_ROOT', RUNTIME_ROOT.'cache/');	#定义编译缓存目录
 define('APP_ROOT', INDEX_ROOT . 'application/');#定义项目目录
 define('VIEW_ROOT', INDEX_ROOT . 'resource/template/');#定义html目录
 define('BASE_ROOT', '/'); #主目录
-define('CACHEVIEW_ROOT',INDEX_ROOT.'runtime/viewcache/'); //视图缓存目录
+define('CACHEVIEW_ROOT',RUNTIME_ROOT.'viewcache/'); //视图缓存目录
 define('PUBBLIC_ROOT',INDEX_ROOT.'public/'); //前端文件目录
 
 require INDEX_ROOT.'config/config.php';

@@ -98,7 +98,7 @@ ul, ol {
 	height:20px;
 	
 }
-.content_center {
+ .content_center{
 	border:1px solid #e8e9e9;
 	height:400px;
 	padding:10px;
@@ -108,5 +108,30 @@ ul, ol {
     clear: both;
     margin-top: 10px;
     text-align: center;
-
 }
+
+.content_center .sql_title {
+	background: #ffe1a0 none repeat scroll 0 0;
+    border: 1px solid #cccccc;
+    color: #3d70a6;
+    margin: 0 0 0 10px;
+    padding: 5px;
+}
+.content_center .sql_style li {
+	height:30px;
+}
+.content_center .admin_msg li {
+	height:30px;
+}
+.content_center .file {
+    color: #454545;
+    float: left;
+    line-height: 20px;
+    padding-left: 10px;
+    width: 100px;
+}
+
+
+
+
+
