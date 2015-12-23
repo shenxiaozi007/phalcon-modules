@@ -1,4 +1,5 @@
-<form method="post" action="/install/index/index">
+<?php echo $this->getContent(); ?>
+<form method="post" action="/install/index/start">
 	<div class="con_top">
 		数据库配置
 	</div>
@@ -40,7 +41,7 @@
 				</li>
 				<li>
 					<span class="file">管理员密码:</span>
-					<input type="text" name="password" size="25" value=<?php echo $password; ?> >
+					<input type="password" name="password" size="25" value=<?php echo $password; ?> >
 				</li>
 				<li>
 					<span class="file">管理员邮箱:</span>

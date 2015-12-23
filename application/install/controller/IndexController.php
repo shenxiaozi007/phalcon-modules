@@ -1,6 +1,8 @@
 <?php
 namespace App\Install\Controller;
+use Zend\Db\Sql\Ddl\Column\Varchar;
 class IndexController extends CommonController {
+    private $dbConfig = array();
     public function initialize() {
         $this->tag->setTitle('安装页面');
         parent::initialize();
@@ -69,26 +71,87 @@ class IndexController extends CommonController {
      */
     public function startAction() {
         $this->view->setVars(
-            array(
+            [
                 'style'   => 'start',
                 'host' => '127.0.0.1',
                 'port' => '3306',
                 'username' => 'root',
-                'dbPassword' => '123456',
-                'dbName' => 'hxc_cms',
-                'dbPrefix' => 'hxc',
+                'dbPassword' => '',
+                'dbName' => 'dev_ajb_com',
+                'dbPrefix' => 'ajb',
                 'adminName' => 'admin',
-            )
+            ]
         );
         if($this->request->isPost()) {
+             
+            global $config;
+            var_dump($this->request->getPost());
+            //设置给前端的值
+            foreach ($this->request->getPost() as $k=>$v) {
+                $this->view->$k = $v; 
+                
+            }
+            if(empty($this->request->getPost('host')) || empty($this->request->getPost('username'))) {
+                return $this->flash->error('数据库地址或用户名不能为空');
+                
+            }
+            if(empty($this->request->getPost('dbName'))) {
+                return $this->flash->error('数据库名不能为空');
+            }
+            if(empty($this->request->getPost('adminName')) || empty($this->request->getPost('password'))) {
+                return $this->flash->error('管理员账号或密码不能为空');
+            }
             
+            //转换下数据
+            extract($_POST);
+            //开始链接数据库
+            $con = @mysqli_connect($host.':'.$port, $username, $dbPassword);
+            
+            if(!$con){
+                return $this->flash->error('数据库连接失败');
+            }
+            
+            $selectDb = mysqli_select_db($dbName);
+            if($selectDb) {
+                $isSet = false; 
+                //存在则覆盖
+                $query = mysqli_query("show tables like '.$dbPrefix.'%");
+                var_dump($isSet);
+                var_dump($query);
+                while (mysql_fetch_assoc($query)) {
+                    $isSet = true;
+                    break;
+                }
+                if($isSet) {
+                    $this->flash->error('表存在执行覆盖');
+                    return $this->response->redirect('install/index/start');
+                }
+            } else {
+                //不存在则创建
+                if(mysqli_get_server_info($con) > '4.1') {
+                    $mysql = "create database if not exists {$dbName} DEFAULT CHARACTER SET ".$config['mysqlDb']['charset']."";
+                } else {
+                    $mysql = "create database if not exists {$dbName}";
+                }
+                if(!mysqli_query($mysql, $con)) {
+                    return $this->flash->error('数据库创建失败失败');
+                }
+            }
+            $this->dbConfig = $_POST;
+            return $this->respose->redirct('install/index/setMysql');
         }
+        
     }
     /**
-     * 同意
+     * 开始安装
      */
-    public function acceptAction() {
-       
+    public function setMysqlAction() {
+        global $config;
+        extract($this->dbConfig);
+        //链接数据库$host.':'.$port, $username, $dbPassword
+        $con = mysqli_connect($host.':'.$port, $username, $dbPassword);
+        $version = mysqli_get_server_info();
+        
     }
     
     
