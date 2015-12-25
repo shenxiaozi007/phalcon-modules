@@ -70,6 +70,9 @@ class IndexController extends CommonController {
      * 开始填写配置
      */
     public function startAction() {
+        $sqlFile = INDEX_ROOT.'/application/install/sqldata/dev_ajb_com.sql';
+        $content = $this->turnMysql($sqlFile);
+       
         $this->view->setVars(
             [
                 'style'   => 'start',
@@ -151,8 +154,22 @@ class IndexController extends CommonController {
         //链接数据库$host.':'.$port, $username, $dbPassword
         $con = mysqli_connect($host.':'.$port, $username, $dbPassword);
         $version = mysqli_get_server_info();
-        
+        $sqlFile = INDEX_ROOT.'/application/install/sqldata/dev_ajb_com.sql';
+        $content = $this->turnMysql($sqlFile);
     }
     
-    
+    /**
+     * 转换数据库数据
+     */
+    public function turnMysql($sqlFile) {
+        $content = file_get_contents($sqlFile);
+        var_dump($content);
+         $content = str_replace("\r\n", "\n", $content);
+        /*$content = trim(str_replace("\r", "\n", $content)); */
+        var_dump($content);
+        $items = explode(";\n", $content);
+        var_dump($items);
+        
+        exit;
+    }
 }
