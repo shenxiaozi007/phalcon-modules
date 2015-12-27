@@ -1,6 +1,7 @@
 <?php
 namespace App\Install\Controller;
 use Zend\Db\Sql\Ddl\Column\Varchar;
+use Zend\Validator\Explode;
 class IndexController extends CommonController {
     private $dbConfig = array();
     public function initialize() {
@@ -119,8 +120,8 @@ class IndexController extends CommonController {
                 $isSet = false; 
                 //存在则覆盖
                 $query = mysqli_query("show tables like '.$dbPrefix.'%");
-                var_dump($isSet);
-                var_dump($query);
+                /* var_dump($isSet);
+                var_dump($query); */
                 while (mysql_fetch_assoc($query)) {
                     $isSet = true;
                     break;
@@ -151,25 +152,51 @@ class IndexController extends CommonController {
     public function setMysqlAction() {
         global $config;
         extract($this->dbConfig);
+        
         //链接数据库$host.':'.$port, $username, $dbPassword
-        $con = mysqli_connect($host.':'.$port, $username, $dbPassword);
+        $con = @mysqli_connect($host.':'.$port, $username, $dbPassword);
         $version = mysqli_get_server_info();
         $sqlFile = INDEX_ROOT.'/application/install/sqldata/dev_ajb_com.sql';
         $content = $this->turnMysql($sqlFile);
+        
+        mysqli_query("show tables like '.$dbPrefix.'%");
+        //执行数据库插入操作
+        foreach($content as $line) {
+            $query = $line;
+            mysqli_query($line, $con);
+            
+        }
     }
     
     /**
      * 转换数据库数据
      */
     public function turnMysql($sqlFile) {
-        $content = file_get_contents($sqlFile);
-        var_dump($content);
-         $content = str_replace("\r\n", "\n", $content);
-        /*$content = trim(str_replace("\r", "\n", $content)); */
-        var_dump($content);
-        $items = explode(";\n", $content);
-        var_dump($items);
         
-        exit;
+        $content = file_get_contents($sqlFile);
+        $content = str_replace("\r\n", "\n", $content);
+        $content = trim(str_replace("\r", "\n", $content)); 
+        
+        $items = explode(";\n", $content);
+        $resItems = array();
+        foreach ($items as $v) {
+           
+            $v = trim($v);
+            //var_dump($v);
+            $lines = explode("\n",$v);
+            //重新组合数据
+            if(!empty($lines) && is_array($lines)) {
+                foreach($lines as $line) {
+                    if(isset($lines[1]) && mb_substr($line,0,2,'utf-8') == '--') {
+                        $resItems[] = $lines[3];
+                        continue;
+                    }
+                    $resItems[] = $v;
+                }
+            }
+            
+        }
+        return $resItems;
+        
     }
 }
