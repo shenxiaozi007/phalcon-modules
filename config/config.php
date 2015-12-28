@@ -11,12 +11,13 @@ return $config =  array(
     'mysqlDb'=>	array(
         'driver'    => 'mysql',
         'host'      => 'localhost',
-        'database'  => 'dev_ajb_com',
+        'database'  => 'dev_ajb_test',
         'username'  => 'root',
         'password'  => '',
         'charset'   => 'utf8',
         'collation' => 'utf8_general_ci',
-        'prefix'    => 'ajb_'
+        'prefix'    => 'hxc_',
+        'port'      => 3306
     ),
 );
 #如果是生产环境，则覆盖

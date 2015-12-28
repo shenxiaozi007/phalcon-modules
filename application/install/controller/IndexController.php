@@ -1,9 +1,9 @@
 <?php
 namespace App\Install\Controller;
-use Zend\Db\Sql\Ddl\Column\Varchar;
-use Zend\Validator\Explode;
 class IndexController extends CommonController {
-    private $dbConfig = array();
+    
+    private $dbConfig = array(); //配置
+    
     public function initialize() {
         $this->tag->setTitle('安装页面');
         parent::initialize();
@@ -81,7 +81,7 @@ class IndexController extends CommonController {
                 'port' => '3306',
                 'username' => 'root',
                 'dbPassword' => '',
-                'dbName' => 'dev_ajb_com',
+                'dbName' => 'dev_ajb_test',
                 'dbPrefix' => 'ajb',
                 'adminName' => 'admin',
             ]
@@ -89,7 +89,7 @@ class IndexController extends CommonController {
         if($this->request->isPost()) {
              
             global $config;
-            var_dump($this->request->getPost());
+            //var_dump($this->request->getPost());
             //设置给前端的值
             foreach ($this->request->getPost() as $k=>$v) {
                 $this->view->$k = $v; 
@@ -109,40 +109,46 @@ class IndexController extends CommonController {
             //转换下数据
             extract($_POST);
             //开始链接数据库
-            $con = @mysqli_connect($host.':'.$port, $username, $dbPassword);
+            $mysqlObj = new \mysqli($host.':'.$port, $username, $dbPassword);
             
-            if(!$con){
+            if($mysqli->connect_errno){
                 return $this->flash->error('数据库连接失败');
             }
-            
-            $selectDb = mysqli_select_db($dbName);
+           
+            $selectDb = $mysqlObj->select_db($dbName);
+            //var_dump($selectDb);
             if($selectDb) {
                 $isSet = false; 
                 //存在则覆盖
-                $query = mysqli_query("show tables like '.$dbPrefix.'%");
+                $query = $mysqlObj->query("show tables like '{$dbPrefix}%'");
+              
                 /* var_dump($isSet);
                 var_dump($query); */
-                while (mysql_fetch_assoc($query)) {
+                
+                while ($row = $query->fetch_assoc()) {
                     $isSet = true;
                     break;
                 }
+               
                 if($isSet) {
                     $this->flash->error('表存在执行覆盖');
                     return $this->response->redirect('install/index/start');
                 }
             } else {
                 //不存在则创建
-                if(mysqli_get_server_info($con) > '4.1') {
+                if($mysqlObj->server_info > '4.1') {
+                    
                     $mysql = "create database if not exists {$dbName} DEFAULT CHARACTER SET ".$config['mysqlDb']['charset']."";
                 } else {
                     $mysql = "create database if not exists {$dbName}";
                 }
-                if(!mysqli_query($mysql, $con)) {
+              
+                if(!$mysqlObj->query($mysql)) {
                     return $this->flash->error('数据库创建失败失败');
                 }
             }
-            $this->dbConfig = $_POST;
-            return $this->respose->redirct('install/index/setMysql');
+            
+            return $this->response->redirect('install/index/setMysql');
         }
         
     }
@@ -150,21 +156,38 @@ class IndexController extends CommonController {
      * 开始安装
      */
     public function setMysqlAction() {
+        $this->view->setVars(
+            [
+                'style' => 'install'
+            ]
+        );
         global $config;
-        extract($this->dbConfig);
+        extract($config['mysqlDb']);
         
         //链接数据库$host.':'.$port, $username, $dbPassword
-        $con = @mysqli_connect($host.':'.$port, $username, $dbPassword);
-        $version = mysqli_get_server_info();
+        $mysqliObj = new \mysqli($host.':'.$port, $username, $password);
+        //选择数据库
+        $selectDb = $mysqliObj->select_db($database);
+        
+        $version = $mysqliObj->server_info;
         $sqlFile = INDEX_ROOT.'/application/install/sqldata/dev_ajb_com.sql';
         $content = $this->turnMysql($sqlFile);
         
-        mysqli_query("show tables like '.$dbPrefix.'%");
+        //$mysqliObj->query("show tables like '{$dbPrefix}%'");
+      
         //执行数据库插入操作
         foreach($content as $line) {
-            $query = $line;
-            mysqli_query($line, $con);
+            //替换掉前缀
+            $line = str_replace('`ajb_', "`$prefix", $line);
+            preg_match('/^CREATE TABLE/', $line, $lines);
             
+            if($lines){
+                preg_match('/`(.+)`/', $line, $res);
+                $this->flash->success($res[1].'插入成功');
+            }
+            if(!empty($line)) {
+                $mysqliObj->query($line);
+            }
         }
     }
     
@@ -179,6 +202,7 @@ class IndexController extends CommonController {
         
         $items = explode(";\n", $content);
         $resItems = array();
+        
         foreach ($items as $v) {
            
             $v = trim($v);
@@ -192,6 +216,8 @@ class IndexController extends CommonController {
                         continue;
                     }
                     $resItems[] = $v;
+                    break;
+                    
                 }
             }
             
