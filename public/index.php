@@ -17,7 +17,15 @@ define('BASE_ROOT', '/'); #主目录
 define('CACHEVIEW_ROOT',RUNTIME_ROOT.'viewcache/'); //视图缓存目录
 define('PUBBLIC_ROOT',INDEX_ROOT.'public/'); //前端文件目录
 
-require INDEX_ROOT.'config/config.php';
+include  INDEX_ROOT.'config/config.php';
+
+#如果是生产环境，则覆盖
+if(is_file(INDEX_ROOT.'application/config/config_pro.php')) {
+    $config = array_merge($config, include(INDEX_ROOT.'application/config/config_pro.php') );
+}
+
+
+return $config;
 require INDEX_ROOT.'config/sevices.php';
 //composer加载
 require INDEX_ROOT.'Vendor/autoload.php';

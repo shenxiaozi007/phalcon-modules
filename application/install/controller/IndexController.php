@@ -71,7 +71,7 @@ class IndexController extends CommonController {
      * 开始填写配置
      */
     public function startAction() {
-        $sqlFile = INDEX_ROOT.'/application/install/sqldata/dev_ajb_com.sql';
+        $sqlFile = INDEX_ROOT.'/application/install/sqldata/my_cms.sql';
         $content = $this->turnMysql($sqlFile);
        
         $this->view->setVars(
@@ -148,6 +148,22 @@ class IndexController extends CommonController {
                 }
             }
             
+            //保存到配置文件中
+            $configRes = file_get_contents(INDEX_ROOT.'config/config.php');
+            //正则匹配
+            
+            $configRes = str_replace("\r\n", "\n", $configRes);
+            $configRes = trim(str_replace("\r", "\n", $configRes));
+            $configRes = explode("),\n", $configRes);
+            var_dump($configRes);
+            exit;
+            $content = str_replace("\r\n", "\n", $content);
+            $content = trim(str_replace("\r", "\n", $content));
+            
+            preg_match('/\'mysqlDb\'(.+)/', $configRes, $mysqlConfig);
+            
+            var_dump($mysqlConfig);
+            exit();
             return $this->response->redirect('install/index/setMysql');
         }
         
@@ -170,11 +186,12 @@ class IndexController extends CommonController {
         $selectDb = $mysqliObj->select_db($database);
         
         $version = $mysqliObj->server_info;
-        $sqlFile = INDEX_ROOT.'/application/install/sqldata/dev_ajb_com.sql';
+        $sqlFile = INDEX_ROOT.'/application/install/sqldata/my_cms.sql';
         $content = $this->turnMysql($sqlFile);
         
         //$mysqliObj->query("show tables like '{$dbPrefix}%'");
-      
+        //设置字符编码
+        $mysqliObj->query('set names utf8;');
         //执行数据库插入操作
         foreach($content as $line) {
             //替换掉前缀
@@ -189,8 +206,22 @@ class IndexController extends CommonController {
                 $mysqliObj->query($line);
             }
         }
+        $this->response->redirect('/install/index/final');
     }
     
+    /**
+     * 安装完成
+     */
+    public function finalAction() {
+        $this->view->setVars(
+            [
+                'style' => 'install'
+            ]
+        );
+        //生成标识文件
+        file_put_contents(INDEX_ROOT.'/application/install/sqldata/install.lock', "fuck you");
+        return $this->response->redirect('/home/index/index');
+    }
     /**
      * 转换数据库数据
      */
