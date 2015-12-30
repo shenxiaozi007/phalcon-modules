@@ -13,6 +13,10 @@ class IndexController extends CommonController {
      * 安装首页
      */
     public function indexAction() {
+        //是否已经安装鸟
+        if(file_exists(INDEX_ROOT.'/application/install/sqldata/install.lock')) {
+            $this->response->redirect('home/index/index');
+        }
         //特定样式
         $this->view->style = 'index';
         if($this->request->isPost()) {
@@ -23,8 +27,6 @@ class IndexController extends CommonController {
             }
             return $this->response->redirect('install/index/check');
         }
-        
-        
     }
     
     /**
@@ -131,7 +133,7 @@ class IndexController extends CommonController {
                 }
                
                 if($isSet) {
-                    $this->flash->error('表存在执行覆盖');
+                    $this->flash->error('数据库已经存在请先删除或更改数据库名');
                     return $this->response->redirect('install/index/start');
                 }
             } else {
@@ -149,21 +151,8 @@ class IndexController extends CommonController {
             }
             
             //保存到配置文件中
-            $configRes = file_get_contents(INDEX_ROOT.'config/config.php');
-            //正则匹配
+            $res = file_put_contents(INDEX_ROOT.'config/mysql.txt', json_encode($_POST));
             
-            $configRes = str_replace("\r\n", "\n", $configRes);
-            $configRes = trim(str_replace("\r", "\n", $configRes));
-            $configRes = explode("),\n", $configRes);
-            var_dump($configRes);
-            exit;
-            $content = str_replace("\r\n", "\n", $content);
-            $content = trim(str_replace("\r", "\n", $content));
-            
-            preg_match('/\'mysqlDb\'(.+)/', $configRes, $mysqlConfig);
-            
-            var_dump($mysqlConfig);
-            exit();
             return $this->response->redirect('install/index/setMysql');
         }
         
@@ -177,13 +166,14 @@ class IndexController extends CommonController {
                 'style' => 'install'
             ]
         );
-        global $config;
-        extract($config['mysqlDb']);
+        $config = json_decode(file_get_contents(INDEX_ROOT.'config/mysql.txt'),true);
+        extract($config);
         
         //链接数据库$host.':'.$port, $username, $dbPassword
-        $mysqliObj = new \mysqli($host.':'.$port, $username, $password);
+        $mysqliObj = new \mysqli($host.':'.$port, $username, $dbPassword);
+       
         //选择数据库
-        $selectDb = $mysqliObj->select_db($database);
+        $selectDb = $mysqliObj->select_db($dbName);
         
         $version = $mysqliObj->server_info;
         $sqlFile = INDEX_ROOT.'/application/install/sqldata/my_cms.sql';
@@ -195,7 +185,7 @@ class IndexController extends CommonController {
         //执行数据库插入操作
         foreach($content as $line) {
             //替换掉前缀
-            $line = str_replace('`ajb_', "`$prefix", $line);
+            $line = str_replace('`ajb_', "`$dbPrefix", $line);
             preg_match('/^CREATE TABLE/', $line, $lines);
             
             if($lines){

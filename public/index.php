@@ -17,7 +17,17 @@ define('BASE_ROOT', '/'); #主目录
 define('CACHEVIEW_ROOT',RUNTIME_ROOT.'viewcache/'); //视图缓存目录
 define('PUBBLIC_ROOT',INDEX_ROOT.'public/'); //前端文件目录
 
-include  INDEX_ROOT.'config/config.php';
+include(INDEX_ROOT.'config/config.php');
+//存在mysql配置文件则修改配置文件
+if(file_exists(INDEX_ROOT.'config/mysql.txt')) {
+    $mysqlCfg = json_decode(file_get_contents(INDEX_ROOT.'config/mysql.txt'), true);
+    $config['mysqlDb']['host'] = $mysqlCfg['host'];
+    $config['mysqlDb']['database'] = $mysqlCfg['dbName'];
+    $config['mysqlDb']['username'] = $mysqlCfg['username'];
+    $config['mysqlDb']['password'] = $mysqlCfg['dbPassword'];
+    $config['mysqlDb']['prefix'] = $mysqlCfg['dbPrefix'];
+    $config['mysqlDb']['port'] = $mysqlCfg['port'];
+}
 
 #如果是生产环境，则覆盖
 if(is_file(INDEX_ROOT.'application/config/config_pro.php')) {
@@ -25,7 +35,6 @@ if(is_file(INDEX_ROOT.'application/config/config_pro.php')) {
 }
 
 
-return $config;
 require INDEX_ROOT.'config/sevices.php';
 //composer加载
 require INDEX_ROOT.'Vendor/autoload.php';
