@@ -218,6 +218,7 @@ class IndexController extends CommonController {
     public function turnMysql($sqlFile) {
         
         $content = file_get_contents($sqlFile);
+        
         $content = str_replace("\r\n", "\n", $content);
         $content = trim(str_replace("\r", "\n", $content)); 
         
