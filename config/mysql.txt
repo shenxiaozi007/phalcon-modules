@@ -1,1 +1,1 @@
-{"host":"127.0.0.1","port":"3306","username":"root","dbPassword":"","dbName":"my_cms","dbPrefix":"ajb_","adminName":"admin","password":"123","email":"173315279@qq.com"}
+{"host":"127.0.0.1","port":"3306","username":"root","dbPassword":"","dbName":"dev_ajb_test1","dbPrefix":"ajb1_","adminName":"admin","password":"123456","email":"2457800495@qq.com"}

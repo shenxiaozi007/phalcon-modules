@@ -1,5 +1,8 @@
 <?php
 namespace App\Install\Controller;
+
+use App\M\User;
+use Library\Extend\Hash;
 class IndexController extends CommonController {
     
     private $dbConfig = array(); //配置
@@ -146,6 +149,7 @@ class IndexController extends CommonController {
                 }
               
                 if(!$mysqlObj->query($mysql)) {
+                    
                     return $this->flash->error('数据库创建失败失败');
                 }
             }
@@ -196,6 +200,16 @@ class IndexController extends CommonController {
                 $mysqliObj->query($line);
             }
         }
+        //保存用户信息
+        $userObj = new User();
+        $setUser = array(
+            'username' => $adminName,
+            'password' => Hash::userPassword($password),
+            'addTime' => time()
+        );
+        $res = $userObj->insert($setUser);
+        var_dump($res);
+        exit;
         $this->response->redirect('/install/index/final');
     }
     
