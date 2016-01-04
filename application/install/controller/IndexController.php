@@ -208,8 +208,7 @@ class IndexController extends CommonController {
             'addTime' => time()
         );
         $res = $userObj->insert($setUser);
-        var_dump($res);
-        exit;
+       
         $this->response->redirect('/install/index/final');
     }
     

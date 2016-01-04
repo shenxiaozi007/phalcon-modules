@@ -2,5 +2,7 @@
 namespace App\Admin\Controller;
 
 class LoginController extends CommonController {
-    
+    public function indexAction() {
+        
+    }
 }
