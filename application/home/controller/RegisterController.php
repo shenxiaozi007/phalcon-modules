@@ -49,6 +49,7 @@ class RegisterController extends BaseController {
             if($res) {
                 return $this->flash->error('用户名或电话已经被注册了亲');
             }       
+            
             //保存信息
             $resUser = $userObj->insert($data);
             
@@ -58,7 +59,6 @@ class RegisterController extends BaseController {
             } else {
                 $this->flash->success('注册成功');
                 return $this->response->redirect('admin/login/index');
-                
             }
             
         }    
