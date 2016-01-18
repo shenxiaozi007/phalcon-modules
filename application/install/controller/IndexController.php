@@ -252,7 +252,6 @@ class IndexController extends CommonController {
                     }
                     $resItems[] = $v;
                     break;
-                    
                 }
             }
             

@@ -19,7 +19,7 @@ class AclPlugin extends Plugin
 	    $module =  $dispatcher->getModuleName();
 	    $controller = $dispatcher->getControllerName();
 	    $action = $dispatcher->getActionName();
-	
+	/* 
 	    $objResource= new \App\M\Resource();
 	
 	    //自动将控制器名称保存到资源表
@@ -32,6 +32,6 @@ class AclPlugin extends Plugin
 	        $actionName=$module.'_'.$controller.'_'.$action;
 	        $controllerName=$module.'_'.$controller;
 	        $objResource->addResource($companyId,$module,$controllerName,$actionName);
-	    }
+	    } */
 	}	
 }

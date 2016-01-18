@@ -1,7 +1,7 @@
 <?php
 /**
  * 管理后台的公用控制器
- * @author 邓彪20151214
+ * @author
  *
  */
 namespace App\Com\Controller;
