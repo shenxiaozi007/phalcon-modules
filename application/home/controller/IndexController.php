@@ -5,4 +5,11 @@ class IndexController extends BaseController {
     public function indexAction() {
         
     }
+    
+    /**
+     * 登录
+     */
+    public function loginAction() {
+        
+    }
 }

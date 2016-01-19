@@ -1,6 +1,6 @@
 <?php
 namespace App\Admin\Controller;
-
+use App\Admin\Controller\CommonController;
 class LoginController extends CommonController {
 public function initialize() {
         $this->tag->setTitle('登陆页面');

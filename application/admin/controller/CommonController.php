@@ -1,5 +1,5 @@
 <?php 
-namespace App\Com\Controller;
+namespace App\Admin\Controller;
 use Phalcon\Mvc\Controller;
 
 class CommonController extends Controller {
