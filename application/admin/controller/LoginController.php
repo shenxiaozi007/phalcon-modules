@@ -2,6 +2,7 @@
 namespace App\Admin\Controller;
 use App\Admin\Controller\CommonController;
 use App\M\User;
+use Library\Extend\Hash;
 class LoginController extends CommonController {
     public function initialize() {
         $this->tag->setTitle('登陆页面');

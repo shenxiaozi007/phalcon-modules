@@ -10,6 +10,7 @@
 		{{ stylesheet_link('admin/css/global.css') }}
     </head>
     <body>
+        {{ flash.output() }}
         {{ content() }}
         {{ javascript_include('js/jquery.min.js') }}
         {{ javascript_include('js/bootstrap.min.js') }}

@@ -5,8 +5,6 @@ use Phalcon\Mvc\Controller;
 class CommonController extends Controller {
     public $_userInfo;
 
-
-
     public function initialize() {
         //是否登陆
 
